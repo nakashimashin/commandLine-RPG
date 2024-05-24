@@ -196,8 +196,18 @@ bool Player::moveTo(int dx, int dy) {
 
 void Player::attackTo(int dx, int dy) {
     int targetX = x+dx, targetY = y+dy;
-    if ((targetX == game->monster1->x)&&(targetY == game->monster1->y)) { game->monster1->hp -= 20; }
-    if ((targetX == game->monster2->x)&&(targetY == game->monster2->y)) { game->monster2->hp -= 20; }
+    if ((targetX == game->monster1->x)&&(targetY == game->monster1->y)) {
+            if (game->monster1->hp > 0){
+                game->monster1->hp -= 20;
+                if (game->monster1->hp < 0) { game->monster1->hp = 0;}
+            }
+        }
+    if ((targetX == game->monster2->x)&&(targetY == game->monster2->y)) {
+            if (game->monster2->hp > 0){
+                game->monster2->hp -= 20;
+                if (game->monster2->hp < 0) { game->monster2->hp = 0;}
+            }
+        }
 }
 
 void Player::action() {
@@ -248,11 +258,20 @@ bool Monster::moveTo(int dx, int dy) {
     return true;
 }
 
+// void Monster::attackTo(int dx, int dy) {
+//     int targetX = x+dx, targetY = y+dy;
+//     if ((targetX == game->player->x)&&(targetY == game->player->y)) { game->player->hp -= 30; }
+// }
+
 void Monster::attackTo(int dx, int dy) {
     int targetX = x+dx, targetY = y+dy;
-    if ((targetX == game->player->x)&&(targetY == game->player->y)) { game->player->hp -= 30; }
+    if ((targetX == game->player->x)&&(targetY == game->player->y)) {
+        if (game->player->hp > 0) {
+            game->player->hp -= 30; 
+            if (game->player->hp < 0) { game->player->hp = 0; }
+        }
+    }
 }
-
 
 void Monster::action() {
     if (Monster::hp <= 0) { return; }
