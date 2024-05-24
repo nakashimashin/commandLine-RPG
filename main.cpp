@@ -253,9 +253,12 @@ void Monster::attackTo(int dx, int dy) {
     if ((targetX == game->player->x)&&(targetY == game->player->y)) { game->player->hp -= 30; }
 }
 
-void Monster::action() {    
-    int dx = Game::signum(game->player->x - x);
-    int dy = Game::signum(game->player->y - y);
 
-    if (!moveTo(dx,dy)) { attackTo(dx,dy); }
+void Monster::action() {
+    bool isAction = true;
+    if (Monster::hp <= 0) { return; }
+        int dx = Game::signum(game->player->x - x);
+        int dy = Game::signum(game->player->y - y);
+
+        if (!moveTo(dx,dy)) { attackTo(dx,dy); }
 }
