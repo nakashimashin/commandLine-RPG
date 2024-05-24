@@ -255,7 +255,6 @@ void Monster::attackTo(int dx, int dy) {
 
 
 void Monster::action() {
-    bool isAction = true;
     if (Monster::hp <= 0) { return; }
         int dx = Game::signum(game->player->x - x);
         int dy = Game::signum(game->player->y - y);
