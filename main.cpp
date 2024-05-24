@@ -41,7 +41,7 @@ class Map {
 
 class Player {
   public:
-    static const int INIT_HP = 100;
+    static const int INIT_HP = 1000;
 
     Game *game;
     int x, y;
@@ -95,7 +95,17 @@ void Game::print() {
 
 void Game::mainLoop() {
     print();
-    while (true) { turn(); }
+    while (true) {
+        turn();
+        if (player->hp <= 0) { 
+            cout << "You lose!" << endl;
+            break;
+            }
+        if (player->x == Map::XSIZE-2 && player->y == Map::YSIZE-2) {
+            cout << "You win!" << endl;
+            break;
+            }
+        }
 }
 
 void Game::turn() {
