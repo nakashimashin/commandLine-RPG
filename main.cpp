@@ -7,7 +7,7 @@ class Player;
 class Monster;
 
 class Game {
-  public:
+    public:
     Map *map;
     Player *player;
     Monster *monster1;
@@ -23,7 +23,7 @@ class Game {
 
 
 class Map {
-  public:
+    public:
     static const int ROCK = 0;
     static const int EMPTY = 1;
     static const int GOAL = 2;
@@ -33,40 +33,40 @@ class Map {
 
     Game *game;
     int data[XSIZE][YSIZE];
-    
+
     Map(Game *game);
     void print();
     void cellPrint(int x, int y);
 };
 
 class Player {
-  public:
+    public:
     static const int INIT_HP = 1000;
 
     Game *game;
     int x, y;
     int hp;
-    
+
     Player(Game *game);
     void print();
     bool cellPrint(int x, int y);
-    bool moveTo(int dx, int dy);   
+    bool moveTo(int dx, int dy);
     void attackTo(int dx, int dy);
     void action();
 };
 
 class Monster {
-  public:
+    public:
     static const int INIT_HP = 150;
 
     Game *game;
     int x, y;
     int hp;
-    
+
     Monster(Game *game, int x, int y);
     void print();
     bool cellPrint(int x, int y);
-    bool moveTo(int dx, int dy);   
+    bool moveTo(int dx, int dy);
     void attackTo(int dx, int dy);
     void action();
 };
@@ -130,20 +130,20 @@ int Game::signum(int a) {
 
 Map::Map(Game *game_) {
     game = game_;
-    for (int x = 0; x < XSIZE; x++) {  
+    for (int x = 0; x < XSIZE; x++) {
         for (int y = 0; y < YSIZE; y++) {
             if ((x == 0)||(x == XSIZE-1)||
-               (y == 0)||(y == YSIZE-1)||
-               ((abs(x-XSIZE/2) <= 1)&&
-                (abs(y-YSIZE/2) <= 1))) { 
-                data[x][y] = ROCK; 
+            (y == 0)||(y == YSIZE-1)||
+            ((abs(x-XSIZE/2) <= 1)&&
+                (abs(y-YSIZE/2) <= 1))) {
+                data[x][y] = ROCK;
             }
             else { data[x][y] = EMPTY; }
         }
     }
     data[XSIZE-2][YSIZE-2] = GOAL;
 }
-    
+
 void Map::print() {
     for (int y = 0; y < YSIZE; y++) {
         for (int x = 0; x < XSIZE; x++) {
@@ -172,7 +172,7 @@ Player::Player(Game *game_) {
 
 void Player::print() {
     cout << "Player : (" << x << "," << y << ") " 
-         << hp << endl;
+        << hp << endl;
 }
 
 bool Player::cellPrint(int x_, int y_) {
@@ -223,7 +223,7 @@ void Player::action() {
         case 'e': dx = +1; dy = -1; break;
         default:  dx =  0; dy =  0; 
     }
-    
+
     if (!moveTo(dx,dy)) { attackTo(dx,dy); }
 }
 
@@ -235,7 +235,7 @@ Monster::Monster(Game *game_, int x_, int y_) {
 
 void Monster::print() {
     cout << "Monster : (" << x << "," << y << ") " 
-         << hp << endl;
+        << hp << endl;
 }
 
 bool Monster::cellPrint(int x_, int y_) {
@@ -248,7 +248,7 @@ bool Monster::cellPrint(int x_, int y_) {
 
 bool Monster::moveTo(int dx, int dy) {
     int targetX = x+dx, targetY = y+dy;
-    
+
     if (game->map->data[targetX][targetY] == Map::ROCK) { return false; }
     if ((targetX == game->player->x)&&(targetY == game->player->y)) { return false; } 
     if ((targetX == game->monster1->x)&&(targetY == game->monster1->y)) { return false; } //!
@@ -257,11 +257,6 @@ bool Monster::moveTo(int dx, int dy) {
     x = targetX; y = targetY;
     return true;
 }
-
-// void Monster::attackTo(int dx, int dy) {
-//     int targetX = x+dx, targetY = y+dy;
-//     if ((targetX == game->player->x)&&(targetY == game->player->y)) { game->player->hp -= 30; }
-// }
 
 void Monster::attackTo(int dx, int dy) {
     int targetX = x+dx, targetY = y+dy;
