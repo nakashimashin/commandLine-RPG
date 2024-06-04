@@ -8,17 +8,18 @@ class Monster;
 
 class Game {
     public:
-    Map *map;
-    Player *player;
-    Monster *monster1;
-    Monster *monster2;
+        int turnCount;
+        Map *map;
+        Player *player;
+        Monster *monster1;
+        Monster *monster2;
 
-    Game();
-    void print();
-    void turn();
-    void mainLoop();
-    static char getKeyChar();
-    static int signum(int a);
+        Game();
+        void print();
+        void turn();
+        void mainLoop();
+        static char getKeyChar();
+        static int signum(int a);
 };
 
 
@@ -41,7 +42,8 @@ class Map {
 
 class Player {
     public:
-    static const int INIT_HP = 1000;
+    static const int INIT_HP = 500;
+    int attackPower;
 
     Game *game;
     int x, y;
@@ -83,6 +85,7 @@ Game::Game() {
     player = new Player(this);
     monster1 = new Monster(this, 1, Map::YSIZE-2);
     monster2 = new Monster(this, Map::XSIZE-2, 1);
+    turnCount = 0;
 }
 
 void Game::print() {
@@ -113,6 +116,12 @@ void Game::turn() {
     monster1->action();
     monster2->action();
     print();
+
+    turnCount++;
+    if (turnCount % 3 == 0) {
+        player->attackPower += 2;
+        cout << "攻撃力アップ:" << player->attackPower << "power" << endl;
+    }
 }
 
 char Game::getKeyChar() {
@@ -168,6 +177,7 @@ Player::Player(Game *game_) {
     game = game_;
     x = 1; y = 1;
     hp = INIT_HP;
+    attackPower = 20;
 }
 
 void Player::print() {
@@ -197,16 +207,12 @@ bool Player::moveTo(int dx, int dy) {
 void Player::attackTo(int dx, int dy) {
     int targetX = x+dx, targetY = y+dy;
     if ((targetX == game->monster1->x)&&(targetY == game->monster1->y)) {
-            if (game->monster1->hp > 0){
-                game->monster1->hp -= 20;
-                if (game->monster1->hp < 0) { game->monster1->hp = 0;}
-            }
+            game->monster1->hp -= attackPower;
+            if (game->monster1->hp < 0) { game->monster1->hp = 0;}
         }
     if ((targetX == game->monster2->x)&&(targetY == game->monster2->y)) {
-            if (game->monster2->hp > 0){
-                game->monster2->hp -= 20;
-                if (game->monster2->hp < 0) { game->monster2->hp = 0;}
-            }
+            game->monster2->hp -= attackPower;
+            if (game->monster2->hp < 0) { game->monster2->hp = 0;}
         }
 }
 
